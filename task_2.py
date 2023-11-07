@@ -5,19 +5,19 @@
 число от 1 до 8 - координаты 8 ферзей. Если ферзи не бьют друг друга верните истину, а если бьют - ложь.'''
 
 
-def queens(x, y):
-    for i in range(1, 9):
-        for j in range(i + 1, 9):
+def checking_placement_of_queens(x, y):
+    for i in range(8):
+        for j in range(i + 1, 8):
             if x[i] == x[j] or y[i] == y[j] or abs(x[i] - x[j]) == abs(y[i] - y[j]):
                 return False
     return True
 
-
-n = 8
-x = []
-y = []
-for i in range(n):
-    coor_x, coor_y = [int(j) for j in input().split()]
-    x.append(coor_x)
-    y.append(coor_y)
-print(queens(x, y))
+if __name__ == '__main__':
+    n = 8
+    x = []
+    y = []
+    for i in range(n):
+        coor_x, coor_y = [int(j) for j in input().split()]
+        x.append(coor_x)
+        y.append(coor_y)
+    print(checking_placement_of_queens(x, y))
