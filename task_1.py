@@ -1,30 +1,19 @@
-'''В модуль с проверкой даты добавьте возможность запуска в терминале с передачей даты на проверку.'''
+'''Напишите функцию, которая заполняет файл
+(добавляет в конец) случайными парами чисел.
+Первое число int, второе - float разделены вертикальной чертой.
+Минимальное число - -1000, максимальное - +1000.
+Количество строк и имя файла передаются как аргументы функции.'''
 
-from datetime import datetime
-from sys import argv
-
-def date_validate(date_text: str) -> bool:
-    try:
-        datetime.strptime(date_text, '%d.%m.%Y').date()
-        print(True)
-        leap_info(date_text)
-        return True
-    except:
-        print(False)
-        return False
+import random
 
 
-def leap_info(date_text: str) -> bool:
-    year = int(date_text.split(".")[-1])
-    if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
-        print(True)
-        return True
-    else:
-        print(False)
-        return False
+def generate_random_data_and_append(filename, num_lines):
+    with open(filename, 'a') as file:
+        for _ in range(num_lines):
+            int_num = random.randint(-1000, 1000)
+            float_num = random.uniform(-1000.0, 1000.0)
+            line = f'{int_num} | {float_num}\n'
+            file.write(line)
 
 
-if __name__ == '__main__':
-    date_validate(argv[1])
-
-'''в argv подаются 2 значения, первое имя запускаемого файла, второе это сама дата'''
+generate_random_data_and_append('data.txt', 10)
