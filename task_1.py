@@ -1,30 +1,32 @@
-'''В модуль с проверкой даты добавьте возможность запуска в терминале с передачей даты на проверку.'''
+'''Вспоминаем задачу 3 из прошлого семинара. Мы сформировали текстовый файл с псевдо именами и произведением чисел.
+Напишите функцию, которая создаёт из созданного ранее файла новый с данными в формате JSON.
+Имена пишите с большой буквы.
+Каждую пару сохраняйте с новой строки.'''
 
-from datetime import datetime
-from sys import argv
+import json
+from pathlib import Path
 
-def date_validate(date_text: str) -> bool:
-    try:
-        datetime.strptime(date_text, '%d.%m.%Y').date()
-        print(True)
-        leap_info(date_text)
-        return True
-    except:
-        print(False)
-        return False
+targ_file_name = './result.txt'
+dest_file_name = './update.txt'
 
 
-def leap_info(date_text: str) -> bool:
-    year = int(date_text.split(".")[-1])
-    if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
-        print(True)
-        return True
-    else:
-        print(False)
-        return False
+def parce_and_create(targ_file, dest_file):
+    targ_file_name = Path(targ_file).resolve()
+    dest_file_name = Path(dest_file).resolve()
+    with open(targ_file, 'r', encoding='utf-8') as ft:
+        result = {}
+        for line in ft.readlines():
+            k, v, *_ = line.split('|')
+            k = k.capitalize()
+            result[k] = float(v)
+        with open(dest_file, 'w') as fd:
+            json.dump(result, fd, indent=2, ensure_ascii=False)
+        return
+
+
+def main():
+    parce_and_create(targ_file_name, dest_file_name)
 
 
 if __name__ == '__main__':
-    date_validate(argv[1])
-
-'''в argv подаются 2 значения, первое имя запускаемого файла, второе это сама дата'''
+    main()
