@@ -1,29 +1,29 @@
-'''Напишите функцию в шахматный модуль. Используйте генератор случайных чисел
-для случайной расстановки ферзей в задаче выше. Проверяйте различный случайные
-варианты и выведите 4 успешных расстановки.'''
+'''Напишите функцию, которая сохраняет созданный в прошлом задании файл в формате CSV.'''
 
-from random import randint
-from task_2 import checking_placement_of_queens as queens
-
-
-def queens_rnd():
-    coordinate_x = []
-    coordinate_y = []
-    for _ in range(8):
-        coordinate_x.append(randint(1, 8))
-        coordinate_y.append(randint(1, 8))
-    return coordinate_x, coordinate_y
+import csv
+import json
+import os
+from pathlib import Path
 
 
-def queens_result():
-    coor_x, coor_y = [1, 2, 3, 4, 5, 6, 7, 8], [1, 2, 3, 4, 5, 6, 7, 8]
-    result_list = []
-    for _ in range(4):
-        while not queens(coor_x, coor_y):
-            coor_x, coor_y = queens_rnd()
-        result_list.append([coor_x, coor_y])
-    return result_list
+def get_from_user(file: Path) -> None:
+    json_file = {}
+    if os.path.isfile(file):
+        with open(file, 'r', encoding='utf-8') as js:
+            if os.path.getsize(file) > 0:
+                json_file = json.load(js)
+
+    rows = []
+    for level, value in json_file.items():
+        for id, name in value.items():
+            rows.append({'level': level, 'user_id': id, 'name': name})
+
+    with open('out.csv', 'w', newline='', encoding='utf-8') as f:
+        fieldnames = ['level', 'user_id', 'name']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 if __name__ == '__main__':
-    print(queens_result())
+    get_from_user(Path('./names.json'))
